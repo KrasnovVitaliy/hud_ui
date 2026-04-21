@@ -6,6 +6,7 @@ import 'package:hud_ui/hud_horizontal_knob.dart';
 import 'package:hud_ui/hud_card.dart';
 import 'package:hud_ui/hud_circular_progress.dart';
 import 'package:hud_ui/hud_circular_sectioned_progress.dart';
+import 'package:hud_ui/hud_circular_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: [
             SizedBox(
-              height: 120,
+              height: 200,
               child: HudCard(
                 title: "Buttons",
                 color: Colors.cyanAccent,
@@ -59,6 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     HudButton(label: "Green", color: Colors.greenAccent, onPressed: () {}),
                     SizedBox(width: 8),
                     HudButton(label: "Orange", color: Colors.orangeAccent, onPressed: () {}),
+                    SizedBox(width: 8),
+                    HudCircularButton(label: "Button", onPressed: (){}, size: 64)
                   ],
                 ),
               ),
