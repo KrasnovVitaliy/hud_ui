@@ -2,45 +2,28 @@ import 'package:flutter/material.dart';
 
 enum ValuePositionHorizontal { left, right }
 
-// -------------------- Горизонтальный регулятор --------------------
-class HudHorizontalKnob extends StatefulWidget {
-  final ValueChanged<double>? onValueChanged;
-  final double initialValue;
-  final Color? color;
+class HudHorizontalKnob extends StatelessWidget {
+  final double value;
+  final ValueChanged<double> onChanged;
   final double min;
   final double max;
+  final Color color;
   final ValuePositionHorizontal? valuePosition;
 
   const HudHorizontalKnob({
-    this.onValueChanged,
-    this.initialValue = 50,
-    this.color = Colors.cyan,
+    required this.value,
+    required this.onChanged,
     this.min = 0,
     this.max = 100,
-    this.valuePosition, // по умолчанию null = без отображения
+    this.color = Colors.cyan,
+    this.valuePosition,
     super.key,
   });
 
-  @override
-  _HudHorizontalKnobState createState() => _HudHorizontalKnobState();
-}
-
-class _HudHorizontalKnobState extends State<HudHorizontalKnob> {
-  late double horizontalValue;
-
-  @override
-  void initState() {
-    super.initState();
-    horizontalValue = widget.initialValue;
-  }
-
   Widget _buildValueText() {
     return Text(
-      horizontalValue.toStringAsFixed(0),
-      style: TextStyle(
-        color: widget.color,
-        fontWeight: FontWeight.bold,
-      ),
+      value.toStringAsFixed(0),
+      style: TextStyle(color: color, fontWeight: FontWeight.bold),
     );
   }
 
@@ -50,41 +33,25 @@ class _HudHorizontalKnobState extends State<HudHorizontalKnob> {
       child: SliderTheme(
         data: SliderTheme.of(context).copyWith(
           trackHeight: 6,
-          activeTrackColor: widget.color,
+          activeTrackColor: color,
           inactiveTrackColor: Colors.white12,
-          thumbColor: widget.color,
-          overlayColor: widget.color!.withAlpha(51),
+          thumbColor: color,
+          overlayColor: color.withAlpha(51),
         ),
-        child: Slider(
-          min: widget.min,
-          max: widget.max,
-          value: horizontalValue,
-          onChanged: (val) {
-            setState(() {
-              horizontalValue = val;
-            });
-            widget.onValueChanged?.call(val);
-          },
-        ),
+        child: Slider(min: min, max: max, value: value.clamp(min, max), onChanged: onChanged),
       ),
     );
 
-    // если позиция не задана — просто слайдер
-    if (widget.valuePosition == null) {
+    // без отображения значения
+    if (valuePosition == null) {
       return slider;
     }
 
     return Row(
       children: [
-        if (widget.valuePosition == ValuePositionHorizontal.left) ...[
-          _buildValueText(),
-          const SizedBox(width: 8),
-        ],
+        if (valuePosition == ValuePositionHorizontal.left) ...[_buildValueText(), const SizedBox(width: 8)],
         slider,
-        if (widget.valuePosition == ValuePositionHorizontal.right) ...[
-          const SizedBox(width: 8),
-          _buildValueText(),
-        ],
+        if (valuePosition == ValuePositionHorizontal.right) ...[const SizedBox(width: 8), _buildValueText()],
       ],
     );
   }

@@ -34,6 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool toggleValue = false;
+  double knobValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +111,48 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.cyanAccent,
                 child: Row(
                   children: [
-                    HudVerticalKnob(valuePosition: ValuePositionVertical.bottom),
-                    HudVerticalKnob(color: Colors.redAccent, valuePosition: ValuePositionVertical.top),
-                    SizedBox(width: 300, child: HudHorizontalKnob(valuePosition: ValuePositionHorizontal.left)),
+                    HudVerticalKnob(
+                      value: knobValue,
+                      valuePosition: ValuePositionVertical.bottom,
+                      onChanged: (value) {
+                        setState(() {
+                          knobValue = value;
+                        });
+                      },
+                    ),
+                    HudVerticalKnob(
+                      value: knobValue,
+                      color: Colors.redAccent,
+                      valuePosition: ValuePositionVertical.top,
+                      onChanged: (value) {
+                        setState(() {
+                          knobValue = value;
+                        });
+                      },
+                    ),
                     SizedBox(
                       width: 300,
                       child: HudHorizontalKnob(
+                        value: knobValue,
+                        valuePosition: ValuePositionHorizontal.left,
+                        onChanged: (value) {
+                          setState(() {
+                            knobValue = value;
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 300,
+                      child: HudHorizontalKnob(
+                        value: knobValue,
                         color: Colors.orangeAccent,
                         valuePosition: ValuePositionHorizontal.right,
+                        onChanged: (value) {
+                          setState(() {
+                            knobValue = value;
+                          });
+                        },
                       ),
                     ),
                   ],

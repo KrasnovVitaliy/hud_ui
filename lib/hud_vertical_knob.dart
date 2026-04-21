@@ -2,47 +2,30 @@ import 'package:flutter/material.dart';
 
 enum ValuePositionVertical { top, bottom }
 
-// -------------------- Линейные регуляторы --------------------
-class HudVerticalKnob extends StatefulWidget {
-  final ValueChanged<double>? onValueChanged;
-  final double initialValue;
-  final Color? color;
+class HudVerticalKnob extends StatelessWidget {
+  final double value;
+  final ValueChanged<double> onChanged;
   final double min;
   final double max;
+  final Color color;
   final String? label;
-  final ValuePositionVertical? valuePosition; // 👈 новый параметр
+  final ValuePositionVertical? valuePosition;
 
   const HudVerticalKnob({
-    this.onValueChanged,
-    this.initialValue = 50,
-    this.color = Colors.cyan,
+    required this.value,
+    required this.onChanged,
     this.min = 0,
     this.max = 100,
+    this.color = Colors.cyan,
     this.label,
-    this.valuePosition, // null = скрыть значение
+    this.valuePosition,
     super.key,
   });
 
-  @override
-  _HudVerticalKnobState createState() => _HudVerticalKnobState();
-}
-
-class _HudVerticalKnobState extends State<HudVerticalKnob> {
-  late double verticalValue;
-
-  @override
-  void initState() {
-    super.initState();
-    verticalValue = widget.initialValue;
-  }
-
   Widget _buildValueText() {
     return Text(
-      verticalValue.toInt().toString(),
-      style: TextStyle(
-        color: widget.color,
-        fontWeight: FontWeight.bold,
-      ),
+      value.toInt().toString(),
+      style: TextStyle(color: color, fontWeight: FontWeight.bold),
     );
   }
 
@@ -53,44 +36,25 @@ class _HudVerticalKnobState extends State<HudVerticalKnob> {
       child: SliderTheme(
         data: SliderTheme.of(context).copyWith(
           trackHeight: 6,
-          activeTrackColor: widget.color,
+          activeTrackColor: color,
           inactiveTrackColor: Colors.white12,
-          thumbColor: widget.color,
-          overlayColor: widget.color!.withAlpha(51),
+          thumbColor: color,
+          overlayColor: color.withAlpha(51),
         ),
-        child: Slider(
-          min: widget.min,
-          max: widget.max,
-          value: verticalValue,
-          onChanged: (val) {
-            setState(() {
-              verticalValue = val;
-            });
-            widget.onValueChanged?.call(val);
-          },
-        ),
+        child: Slider(min: min, max: max, value: value.clamp(min, max), onChanged: onChanged),
       ),
     );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.valuePosition == ValuePositionVertical.top) ...[
-          _buildValueText(),
-          const SizedBox(height: 6),
-        ],
+        if (valuePosition == ValuePositionVertical.top) ...[_buildValueText(), const SizedBox(height: 6)],
 
         slider,
 
-        if (widget.valuePosition == ValuePositionVertical.bottom) ...[
-          const SizedBox(height: 6),
-          _buildValueText(),
-        ],
+        if (valuePosition == ValuePositionVertical.bottom) ...[const SizedBox(height: 6), _buildValueText()],
 
-        if (widget.label != null) ...[
-          const SizedBox(height: 6),
-          Text(widget.label!, style: TextStyle(color: widget.color)),
-        ],
+        if (label != null) ...[const SizedBox(height: 6), Text(label!, style: TextStyle(color: color))],
       ],
     );
   }
