@@ -7,6 +7,7 @@ import 'package:hud_ui/hud_card.dart';
 import 'package:hud_ui/hud_circular_progress.dart';
 import 'package:hud_ui/hud_circular_sectioned_progress.dart';
 import 'package:hud_ui/hud_circular_button.dart';
+import 'package:hud_ui/hud_circular_spinner.dart';
 
 void main() {
   runApp(const MyApp());
@@ -190,6 +191,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       label: "Power",
                       colorMap: {15: Colors.yellowAccent, 10: Colors.orangeAccent, 5: Colors.redAccent},
                     ),
+                    HudCircularSpinner(),
                   ],
                 ),
               ),
