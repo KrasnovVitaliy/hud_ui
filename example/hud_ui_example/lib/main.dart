@@ -136,7 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     HudCircularProgressIndicator(value: 0.1, color: Colors.greenAccent),
                     SizedBox(width: 8),
                     HudCircularProgressIndicator(
-                      value: 0.45,
+                      value: 1,
+                      minValue: -100,
+                      maxValue: 100,
                       linesCount: 0,
                       colorMap: {0.75: Colors.yellowAccent, 0.5: Colors.orangeAccent, 0.35: Colors.redAccent},
                     ),
