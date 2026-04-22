@@ -14,6 +14,7 @@ class HudCircularProgressIndicator extends StatefulWidget {
   final double size;
   final Map<double, Color>? colorMap;
   final Color color;
+  final bool usePercentIndicator;
 
   const HudCircularProgressIndicator({
     required this.value,
@@ -25,17 +26,15 @@ class HudCircularProgressIndicator extends StatefulWidget {
     this.size = 100.0,
     this.color = Colors.cyanAccent,
     this.colorMap,
+    this.usePercentIndicator = true,
     super.key,
   });
 
   @override
-  _HudCircularProgressIndicatorState createState() =>
-      _HudCircularProgressIndicatorState();
+  _HudCircularProgressIndicatorState createState() => _HudCircularProgressIndicatorState();
 }
 
-class _HudCircularProgressIndicatorState
-    extends State<HudCircularProgressIndicator>
-    with TickerProviderStateMixin {
+class _HudCircularProgressIndicatorState extends State<HudCircularProgressIndicator> with TickerProviderStateMixin {
   late List<AnimationController> _controllers;
 
   @override
@@ -91,12 +90,7 @@ class _HudCircularProgressIndicatorState
   }
 
   // -------------------- Полукруги --------------------
-  Widget buildShiftedHalfCircle(
-    double radius,
-    double opacity,
-    double offsetAngle,
-    AnimationController controller,
-  ) {
+  Widget buildShiftedHalfCircle(double radius, double opacity, double offsetAngle, AnimationController controller) {
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
@@ -104,11 +98,7 @@ class _HudCircularProgressIndicatorState
           angle: controller.value * 2 * math.pi + offsetAngle,
           child: CustomPaint(
             size: Size(radius * 2, radius * 2),
-            painter: SolidHalfCirclePainter(
-              radius: radius,
-              opacity: opacity,
-              lineColor: getColor(),
-            ),
+            painter: SolidHalfCirclePainter(radius: radius, opacity: opacity, lineColor: getColor()),
           ),
         );
       },
@@ -148,35 +138,21 @@ class _HudCircularProgressIndicatorState
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (widget.icon != null)
-                Icon(
-                  widget.icon,
-                  color: getColor(),
-                  size: widget.size * 0.24,
-                ),
+              if (widget.icon != null) Icon(widget.icon, color: getColor(), size: widget.size * 0.24),
 
-              if (widget.icon != null)
-                SizedBox(height: widget.size * 0.04),
+              if (widget.icon != null) SizedBox(height: widget.size * 0.04),
 
               Text(
-                '${(normalizedValue * 100).toInt()}%',
-                style: TextStyle(
-                  color: getColor(),
-                  fontWeight: FontWeight.bold,
-                  fontSize: widget.size * 0.16,
-                ),
+                widget.usePercentIndicator ? '${(normalizedValue * 100).toInt()}%' : widget.value.toStringAsFixed(0),
+                style: TextStyle(color: getColor(), fontWeight: FontWeight.bold, fontSize: widget.size * 0.16),
               ),
 
-              if (widget.label != null)
-                SizedBox(height: widget.size * 0.04),
+              if (widget.label != null) SizedBox(height: widget.size * 0.04),
 
               if (widget.label != null)
                 Text(
                   widget.label!,
-                  style: TextStyle(
-                    color: getColor(),
-                    fontSize: widget.size * 0.12,
-                  ),
+                  style: TextStyle(color: getColor(), fontSize: widget.size * 0.12),
                 ),
             ],
           ),
@@ -192,11 +168,7 @@ class SolidHalfCirclePainter extends CustomPainter {
   final double opacity;
   final Color lineColor;
 
-  SolidHalfCirclePainter({
-    required this.radius,
-    required this.opacity,
-    this.lineColor = Colors.cyanAccent,
-  });
+  SolidHalfCirclePainter({required this.radius, required this.opacity, this.lineColor = Colors.cyanAccent});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -208,19 +180,11 @@ class SolidHalfCirclePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
 
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -math.pi / 2,
-      math.pi,
-      false,
-      paint,
-    );
+    canvas.drawArc(Rect.fromCircle(center: center, radius: radius), -math.pi / 2, math.pi, false, paint);
   }
 
   @override
   bool shouldRepaint(covariant SolidHalfCirclePainter oldDelegate) {
-    return oldDelegate.radius != radius ||
-        oldDelegate.opacity != opacity ||
-        oldDelegate.lineColor != lineColor;
+    return oldDelegate.radius != radius || oldDelegate.opacity != opacity || oldDelegate.lineColor != lineColor;
   }
 }

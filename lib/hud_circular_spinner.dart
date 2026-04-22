@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'utils.dart';
 
 // -------------------- Круговой прогресс с полукругами и иконкой --------------------
 class HudCircularSpinner extends StatefulWidget {

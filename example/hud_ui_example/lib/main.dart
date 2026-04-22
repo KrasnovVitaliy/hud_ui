@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     SizedBox(width: 8),
                     HudButton(label: "Orange", color: Colors.orangeAccent, onPressed: () {}),
                     SizedBox(width: 8),
-                    HudCircularButton(label: "Button", onPressed: (){}, size: 64)
+                    HudCircularButton(label: "Button", onPressed: () {}, size: 64),
                   ],
                 ),
               ),
@@ -173,6 +173,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Row(
                   children: [
                     HudCircularProgressIndicator(value: 0.1, color: Colors.greenAccent),
+                    HudCircularProgressIndicator(
+                      usePercentIndicator: false,
+                      minValue: 0,
+                      maxValue: 180,
+                      value: 100,
+                      color: Colors.greenAccent,
+                    ),
                     SizedBox(width: 8),
                     HudCircularProgressIndicator(
                       value: 1,
